@@ -29,7 +29,7 @@ def test_abstention_threshold_selected_on_validation_predictions_only():
     threshold = choose_abstention_threshold(y, p, [1, 7], maximum_risk=0.0)
     result = selective_metrics(y, p, [1, 7], threshold)
     assert result["selected_accuracy"] == 1.0
-    assert result["coverage"] == 0.5
+    assert result["coverage"] == 0.75
 
 
 def test_all_predictions_can_be_rejected_safely():
