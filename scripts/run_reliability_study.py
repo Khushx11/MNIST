@@ -1,6 +1,6 @@
 """Evaluate clean and shifted MNIST 1-vs-7 predictions without test-set tuning.
 
-Data: official 60,000/10,000 MNIST split from OpenML. Validation is split
+Data: official 60,000/10,000 MNIST split from the Keras/TensorFlow mirror. Validation is split
 only from official training examples and selects an abstention threshold.
 All corruption metrics use unchanged weights and the same threshold.
 """
@@ -10,6 +10,8 @@ import argparse
 import hashlib
 import json
 import platform
+from io import BytesIO
+from tempfile import NamedTemporaryFile
 from urllib.request import urlopen
 from pathlib import Path
 
@@ -31,19 +33,39 @@ CONDITIONS = [
 ]
 
 
-def dataset():
-    """Read the official MNIST train/test split from TensorFlow's dataset mirror.
+MNIST_URL = "https://storage.googleapis.com/tensorflow/tf-keras-datasets/mnist.npz"
+MNIST_SHA256 = "731c5ac602752760c8e48fbffcf8c3b850d9dc2a2aedcf2cc48468fc17b673d1"
 
-    Caches the original archive locally. No TensorFlow dependency is needed.
-    """
-    path = Path("data/mnist_full.npz")
-    if not path.is_file():
-        path.parent.mkdir(parents=True, exist_ok=True)
-        url = "https://storage.googleapis.com/tensorflow/tf-keras-datasets/mnist.npz"
-        with urlopen(url, timeout=120) as response:
+
+def verified_mnist_archive(path):
+    """Return the canonical archive, checking both downloads and cached copies."""
+    cached = path.is_file()
+    if cached:
+        body = path.read_bytes()
+    else:
+        with urlopen(MNIST_URL, timeout=120) as response:
             body = response.read()
-        path.write_bytes(body)
-    with np.load(path, allow_pickle=False) as data:
+    if hashlib.sha256(body).hexdigest() != MNIST_SHA256:
+        if cached:
+            raise ValueError(f"MNIST checksum mismatch. Remove {path} and rerun to download a fresh copy.")
+        raise ValueError("Downloaded MNIST archive failed checksum verification.")
+    if not cached:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        with NamedTemporaryFile(dir=path.parent, delete=False) as file:
+            temporary = Path(file.name)
+            try:
+                file.write(body)
+                file.close()
+                temporary.replace(path)
+            finally:
+                temporary.unlink(missing_ok=True)
+    return body
+
+
+def dataset():
+    """Load the checksum-verified official MNIST train/test split."""
+    path = Path("data/mnist_full.npz")
+    with np.load(BytesIO(verified_mnist_archive(path)), allow_pickle=False) as data:
         x_train = data["x_train"]
         y_train = data["y_train"].astype(int)
         x_test = data["x_test"]
@@ -105,6 +127,7 @@ def run():
     result = {
         "title": "Handwriting robustness, calibration and selective prediction",
         "dataset": "MNIST official Keras/TensorFlow 60k/10k split; digits 1 and 7",
+        "dataset_sha256": MNIST_SHA256,
         "model": "LogisticRegression(C=0.1, solver=liblinear)",
         "validation_protocol": "Stratified 20% of official training split; no held-out test tuning",
         "train_rows": len(y_train), "validation_rows": len(y_val), "test_rows": len(y_test),

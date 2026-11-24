@@ -23,7 +23,7 @@ python -m pytest tests -q
 python -m scripts.run_reliability_study --output results/reliability_metrics.json
 ```
 
-The full reliability study downloads the canonical 60k/10k MNIST split from the Keras/TensorFlow dataset mirror. It requires no TensorFlow installation. The study does **not** claim novelty over published handwriting research or guaranteed performance under real-world shift. See [evaluation protocol](docs/reliability_protocol.md) and the latest [reliability workflow](.github/workflows/reliability-evaluation.yml). Reported results should be read from the generated artifact, not invented in advance.
+The full reliability study downloads the canonical 60k/10k MNIST split from the Keras/TensorFlow dataset mirror. The runner checks the archive’s SHA-256 on every run and records it in the results JSON. It requires no TensorFlow installation. The study does **not** claim novelty over published handwriting research or guaranteed performance under real-world shift. See [evaluation protocol](docs/reliability_protocol.md) and the latest [reliability workflow](.github/workflows/reliability-evaluation.yml). Reported results should be read from the generated artifact, not invented in advance.
 
 ## Verified research results
 

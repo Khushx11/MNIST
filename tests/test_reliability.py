@@ -78,3 +78,12 @@ def test_risk_coverage_increases_when_validation_risk_constraint_relaxes():
     ]
     assert coverages == sorted(coverages)
     assert coverages[0] < coverages[-1]
+
+
+def test_reliability_rejects_a_modified_mnist_cache(tmp_path):
+    from scripts.run_reliability_study import verified_mnist_archive
+
+    archive = tmp_path / "mnist_full.npz"
+    archive.write_bytes(b"not the official archive")
+    with pytest.raises(ValueError, match="MNIST checksum mismatch"):
+        verified_mnist_archive(archive)
