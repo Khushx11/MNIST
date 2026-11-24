@@ -74,7 +74,7 @@ def run():
     model = LogisticRegression(C=0.1, solver="liblinear", max_iter=400, random_state=42)
     model.fit(train, y_train)
     val_prob = model.predict_proba(val)
-    threshold = choose_abstention_threshold(y_val, val_prob, model.classes_, maximum_risk=0.05)
+    threshold = choose_abstention_threshold(y_val, val_prob, model.classes_, maximum_risk=0.005)
     evaluated = {}
     for condition in CONDITIONS:
         input_images = corrupt(x_test_raw.astype(np.float32) / 255.0, condition, seed=42)
@@ -98,9 +98,10 @@ def run():
         "validation_protocol": "Stratified 20% of official training split; no held-out test tuning",
         "train_rows": len(y_train), "validation_rows": len(y_val), "test_rows": len(y_test),
         "train_label_counts": {str(v): int((y_train == v).sum()) for v in [1, 7]},
-        "validation_risk_target": 0.05,
+        "validation_risk_target": 0.005,
         "selected_confidence_threshold": threshold,
         "validation": probability_summary(y_val, val_prob, model.classes_),
+        "validation_selective": selective_metrics(y_val, val_prob, model.classes_, threshold),
         "duplicate_audit": {
             "train_validation_exact_duplicates": overlap_count(x_train_raw, x_val_raw),
             "train_test_exact_duplicates": overlap_count(x_train_raw, x_test_raw),
