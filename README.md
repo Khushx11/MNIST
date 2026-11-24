@@ -6,13 +6,13 @@ This project began as individual coursework in **Machine Learning Algorithms at 
 
 ## Advanced reliability extension
 
-The original 100-example coursework study remains available in the notebook. A **separate, larger reliability experiment** now trains on digits 1 and 7 from the official 60,000-example MNIST training partition, selects an abstention threshold on a stratified validation split, and evaluates unchanged weights on the held-out official test partition.
+The original 100-example coursework study remains available in the notebook. A **separate, larger reliability experiment** now trains on digits 1 and 7 from the official 60,000-example MNIST training partition, selects confidence thresholds at five validation-only risk targets (0%, 0.1%, 0.5%, 1% and 5%), and evaluates unchanged weights and thresholds on the held-out official test partition.
 
 | Capability | Why it matters |
 | --- | --- |
 | Gaussian noise, rotation and occlusion stress tests | Exposes failures hidden by clean-only accuracy |
 | Expected calibration error and Brier score | Checks whether probability confidence tracks actual correctness |
-| Selective prediction / abstention | Measures coverage versus accuracy without test-set threshold tuning |
+| Selective prediction / abstention | Measures risk and coverage at five validation-selected confidence thresholds, without test-set tuning |
 | Exact image duplicate audit | Makes potential cross-partition overlap visible |
 | GitHub Actions reproducibility | Executes regression tests and produces measured JSON as a workflow artifact |
 
