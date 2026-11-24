@@ -20,7 +20,7 @@ The original 100-example coursework study remains available in the notebook. A *
 python -m pip install -r requirements.txt
 python -m pip install pytest==8.3.2
 python -m pytest tests -q
-python scripts/run_reliability_study.py --output results/reliability_metrics.json
+python -m scripts.run_reliability_study --output results/reliability_metrics.json
 ```
 
 The full reliability study downloads the canonical 60k/10k MNIST split from the Keras/TensorFlow dataset mirror. It requires no TensorFlow installation. The study does **not** claim novelty over published handwriting research or guaranteed performance under real-world shift. See [evaluation protocol](docs/reliability_protocol.md) and the latest [reliability workflow](.github/workflows/reliability-evaluation.yml). Reported results should be read from the generated artifact, not invented in advance.
