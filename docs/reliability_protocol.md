@@ -28,7 +28,9 @@ python -m pytest tests -q
 python -m scripts.run_reliability_study --output results/reliability_metrics.json
 ```
 
-The experiment downloads and caches the ~11 MB canonical MNIST archive at `data/mnist_full.npz`. That file and the generated results directory are ignored by Git. The GitHub Actions `Held-out MNIST reliability study` workflow runs the same evaluation against the official test partition and uploads the measured JSON.
+The experiment downloads and caches the ~11 MB canonical MNIST archive at `data/mnist_full.npz`. The study checks the SHA-256 of downloaded and cached copies before loading the archive. If a cached copy fails verification, remove `data/mnist_full.npz` and rerun to download a fresh copy. The archive and generated results are ignored by Git.
+
+The [checksum-verified GitHub Actions rerun](https://github.com/Khushx11/mnist-classification-and-clustering/actions/runs/45435452942) evaluated 2,163 official test images and reproduced the reported clean and central-occlusion accuracies of 99.26% and 96.90%. Its JSON artifact records the dataset digest alongside the full evaluation. See the [original measured report](measured_reliability.md) for the protocol and interpretation of the published results.
 
 ## Caveats for interview interpretation
 
