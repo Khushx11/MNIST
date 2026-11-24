@@ -51,6 +51,7 @@ def choose_abstention_threshold(y_validation, probabilities, classes, maximum_ri
     if not 0 <= maximum_risk < 1:
         raise ValueError("maximum_risk must be between 0 and 1")
     probability_summary(y_validation, probabilities, classes)
+    probabilities = np.asarray(probabilities, dtype=float)
     confidence = probabilities.max(axis=1)
     correct = np.asarray(classes)[probabilities.argmax(axis=1)] == np.asarray(y_validation)
     best = 1.01
@@ -64,6 +65,7 @@ def choose_abstention_threshold(y_validation, probabilities, classes, maximum_ri
 
 def selective_metrics(y_true, probabilities, classes, threshold):
     probability_summary(y_true, probabilities, classes)
+    probabilities = np.asarray(probabilities, dtype=float)
     confidence = probabilities.max(axis=1)
     keep = confidence >= threshold
     pred = np.asarray(classes)[probabilities.argmax(axis=1)]
