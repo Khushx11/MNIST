@@ -57,3 +57,24 @@ def test_corruptions_reject_unsupported_inputs():
         corrupt(np.ones((28, 28)), "clean")
     with pytest.raises(ValueError):
         corrupt(np.ones((1, 28, 28)), "invented")
+
+
+def test_risk_coverage_increases_when_validation_risk_constraint_relaxes():
+    y = np.array([1, 7, 7, 1, 7])
+    p = np.array([
+        [0.99, 0.01],
+        [0.01, 0.99],
+        [0.40, 0.60],
+        [0.85, 0.15],
+        [0.80, 0.20],
+    ])
+    risks = [0.0, 0.20, 0.40, 0.80]
+    coverages = [
+        selective_metrics(
+            y, p, [1, 7],
+            choose_abstention_threshold(y, p, [1, 7], maximum_risk=risk)
+        )["coverage"]
+        for risk in risks
+    ]
+    assert coverages == sorted(coverages)
+    assert coverages[0] < coverages[-1]
