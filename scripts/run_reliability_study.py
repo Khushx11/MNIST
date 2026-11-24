@@ -10,10 +10,10 @@ import argparse
 import hashlib
 import json
 import platform
+from urllib.request import urlopen
 from pathlib import Path
 
 import numpy as np
-from sklearn.datasets import fetch_openml
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import confusion_matrix, f1_score
 from sklearn.model_selection import train_test_split
@@ -32,15 +32,27 @@ CONDITIONS = [
 
 
 def dataset():
-    mnist = fetch_openml("mnist_784", version=1, as_frame=False, parser="auto")
-    x = np.asarray(mnist.data, dtype=np.uint8).reshape(-1, 28, 28)
-    y = np.asarray(mnist.target, dtype=int)
-    if x.shape != (70000, 28, 28):
-        raise ValueError(f"Unexpected MNIST shape: {x.shape}")
-    train_mask = np.isin(y[:60000], [1, 7])
-    test_mask = np.isin(y[60000:], [1, 7])
-    return x[:60000][train_mask], y[:60000][train_mask], x[60000:][test_mask], y[60000:][test_mask]
+    """Read the official MNIST train/test split from TensorFlow's dataset mirror.
 
+    Caches the original archive locally. No TensorFlow dependency is needed.
+    """
+    path = Path("data/mnist_full.npz")
+    if not path.is_file():
+        path.parent.mkdir(parents=True, exist_ok=True)
+        url = "https://storage.googleapis.com/tensorflow/tf-keras-datasets/mnist.npz"
+        with urlopen(url, timeout=120) as response:
+            body = response.read()
+        path.write_bytes(body)
+    with np.load(path, allow_pickle=False) as data:
+        x_train = data["x_train"]
+        y_train = data["y_train"].astype(int)
+        x_test = data["x_test"]
+        y_test = data["y_test"].astype(int)
+    if x_train.shape != (60000, 28, 28) or x_test.shape != (10000, 28, 28):
+        raise ValueError("Unexpected MNIST official dataset dimensions")
+    train_mask = np.isin(y_train, [1, 7])
+    test_mask = np.isin(y_test, [1, 7])
+    return x_train[train_mask], y_train[train_mask], x_test[test_mask], y_test[test_mask]
 
 def overlap_count(left, right):
     """Audit exact image duplicates, including cases with conflicting labels."""
@@ -81,7 +93,7 @@ def run():
 
     result = {
         "title": "Handwriting robustness, calibration and selective prediction",
-        "dataset": "MNIST official OpenML version 1; digits 1 and 7",
+        "dataset": "MNIST official Keras/TensorFlow 60k/10k split; digits 1 and 7",
         "model": "LogisticRegression(C=0.1, solver=liblinear)",
         "validation_protocol": "Stratified 20% of official training split; no held-out test tuning",
         "train_rows": len(y_train), "validation_rows": len(y_val), "test_rows": len(y_test),
