@@ -74,7 +74,14 @@ def run():
     model = LogisticRegression(C=0.1, solver="liblinear", max_iter=400, random_state=42)
     model.fit(train, y_train)
     val_prob = model.predict_proba(val)
-    threshold = choose_abstention_threshold(y_val, val_prob, model.classes_, maximum_risk=0.005)
+    risk_targets = [0.0, 0.001, 0.005, 0.01, 0.05]
+    thresholds = {
+        f"{target:.3f}": choose_abstention_threshold(
+            y_val, val_prob, model.classes_, maximum_risk=target
+        )
+        for target in risk_targets
+    }
+    threshold = thresholds["0.005"]
     evaluated = {}
     for condition in CONDITIONS:
         input_images = corrupt(x_test_raw.astype(np.float32) / 255.0, condition, seed=42)
@@ -82,6 +89,10 @@ def run():
         pred = model.classes_[prob.argmax(axis=1)]
         results = probability_summary(y_test, prob, model.classes_)
         results.update(selective_metrics(y_test, prob, model.classes_, threshold))
+        results["risk_coverage"] = {
+            risk: selective_metrics(y_test, prob, model.classes_, selected_threshold)
+            for risk, selected_threshold in thresholds.items()
+        }
         results["macro_f1"] = float(f1_score(y_test, pred, average="macro", zero_division=0))
         results["confusion_matrix"] = confusion_matrix(y_test, pred, labels=[1, 7]).tolist()
         # Brier score for digit 7, not a clinical calibration guarantee.
@@ -102,6 +113,11 @@ def run():
         "selected_confidence_threshold": threshold,
         "validation": probability_summary(y_val, val_prob, model.classes_),
         "validation_selective": selective_metrics(y_val, val_prob, model.classes_, threshold),
+        "risk_coverage_thresholds": thresholds,
+        "validation_risk_coverage": {
+            risk: selective_metrics(y_val, val_prob, model.classes_, selected_threshold)
+            for risk, selected_threshold in thresholds.items()
+        },
         "duplicate_audit": {
             "train_validation_exact_duplicates": overlap_count(x_train_raw, x_val_raw),
             "train_test_exact_duplicates": overlap_count(x_train_raw, x_test_raw),
