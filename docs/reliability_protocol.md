@@ -25,7 +25,7 @@ The shifts are deterministic digital transforms, not an external dataset of natu
 python -m pip install -r requirements.txt
 python -m pip install pytest==8.3.2
 python -m pytest tests -q
-python scripts/run_reliability_study.py --output results/reliability_metrics.json
+python -m scripts.run_reliability_study --output results/reliability_metrics.json
 ```
 
 The experiment downloads and caches the ~11 MB canonical MNIST archive at `data/mnist_full.npz`. That file and the generated results directory are ignored by Git. The GitHub Actions `Held-out MNIST reliability study` workflow runs the same evaluation against the official test partition and uploads the measured JSON.
