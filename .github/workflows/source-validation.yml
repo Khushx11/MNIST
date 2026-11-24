@@ -1,4 +1,4 @@
-name: Source and notebook validation
+name: Source, notebook and unit tests
 
 on:
   push:
@@ -9,13 +9,17 @@ jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
-      - name: Check out source
-        uses: actions/checkout@v4
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: '3.11'
-      - name: Validate Python source syntax
+      - name: Install project and testing packages
+        run: |
+          python -m pip install -r requirements.txt
+          python -m pip install pytest==8.3.2
+      - name: Compile Python source
         run: python -m compileall -q src scripts
-      - name: Validate notebook JSON
+      - name: Validate notebook format
         run: python -m json.tool notebooks/analysis.ipynb > /dev/null
+      - name: Run reliability regression tests
+        run: python -m pytest tests -q
