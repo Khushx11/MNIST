@@ -25,6 +25,14 @@ python -m scripts.run_reliability_study --output results/reliability_metrics.jso
 
 The full reliability study downloads the canonical 60k/10k MNIST split from the Keras/TensorFlow dataset mirror. It requires no TensorFlow installation. The study does **not** claim novelty over published handwriting research or guaranteed performance under real-world shift. See [evaluation protocol](docs/reliability_protocol.md) and the latest [reliability workflow](.github/workflows/reliability-evaluation.yml). Reported results should be read from the generated artifact, not invented in advance.
 
+## Verified research results
+
+On **2,163 held-out official MNIST test images** from digits 1 and 7, the reliability extension achieved **99.26% clean accuracy**. Central 8×8 occlusion lowered accuracy to **96.90%** and raised expected calibration error to **0.0702**, compared with **0.0055** on clean test data.
+
+A validation-selected **0% observed-error** abstention cutoff accepted **94.27%** of clean test images, all classified correctly; on rotated images it accepted **83.26%** with **99.83% accuracy among accepted** examples. These numbers were produced by [a successful full-dataset GitHub Actions run](https://github.com/Khushx11/mnist-classification-and-clustering/actions/runs/45383747870). They **do not** guarantee performance on external handwriting or unknown digits.
+
+Read the [complete measured reliability report](docs/measured_reliability.md) for the four stress conditions, coverage/accuracy table and limitations.
+
 ## What it covers
 
 - Pixel statistics and PCA-based exploratory analysis
