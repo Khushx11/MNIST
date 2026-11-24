@@ -1,8 +1,29 @@
-# MNIST 1-vs-7 Classification and Clustering
+# Reliable Handwriting Classification: MNIST 1 vs 7
 
-A reproducible machine-learning case study comparing logistic regression and radial-basis-function SVM classification, with an additional k-means clustering analysis of handwritten digits.
+A reproducible machine-learning case study spanning classification, exploratory clustering, calibration, selective prediction, and robustness to distribution shifts. The reliability experiment expands the original coursework with a fully separate train/validation/test protocol.
 
 This project began as individual coursework in **Machine Learning Algorithms at Adelaide University (2026)**. This public repository contains a cleaned source-code and notebook version, separate from the private submission archive.
+
+## Advanced reliability extension
+
+The original 100-example coursework study remains available in the notebook. A **separate, larger reliability experiment** now trains on digits 1 and 7 from the official 60,000-example MNIST training partition, selects an abstention threshold on a stratified validation split, and evaluates unchanged weights on the held-out official test partition.
+
+| Capability | Why it matters |
+| --- | --- |
+| Gaussian noise, rotation and occlusion stress tests | Exposes failures hidden by clean-only accuracy |
+| Expected calibration error and Brier score | Checks whether probability confidence tracks actual correctness |
+| Selective prediction / abstention | Measures coverage versus accuracy without test-set threshold tuning |
+| Exact image duplicate audit | Makes potential cross-partition overlap visible |
+| GitHub Actions reproducibility | Executes regression tests and produces measured JSON as a workflow artifact |
+
+```sh
+python -m pip install -r requirements.txt
+python -m pip install pytest==8.3.2
+python -m pytest tests -q
+python scripts/run_reliability_study.py --output results/reliability_metrics.json
+```
+
+The full reliability study downloads the canonical 60k/10k MNIST split from the Keras/TensorFlow dataset mirror. It requires no TensorFlow installation. The study does **not** claim novelty over published handwriting research or guaranteed performance under real-world shift. See [evaluation protocol](docs/reliability_protocol.md) and the latest [reliability workflow](.github/workflows/reliability-evaluation.yml). Reported results should be read from the generated artifact, not invented in advance.
 
 ## What it covers
 
@@ -35,9 +56,10 @@ The preparation script downloads the MNIST dataset from OpenML and creates a **n
 ## Repository structure
 
 ```text
-src/                  Reusable analysis, model, tuning and plotting modules
+src/                  Original classification modules plus reliability metrics
 notebooks/analysis.ipynb  Clean notebook with executable code cells
-scripts/prepare_example_data.py  Recreates an example MNIST subset
+scripts/prepare_example_data.py  Recreates original-coursework example subset
+scripts/run_reliability_study.py  Runs official-split robustness evaluation
 docs/original-coursework-results.md  Original experiment observations
 requirements.txt      Reproducible Python dependencies
 ```
