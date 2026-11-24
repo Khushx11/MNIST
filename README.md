@@ -17,8 +17,8 @@ This project began as individual coursework in **Machine Learning Algorithms at 
 Python 3.10 or 3.11 is recommended with the pinned historical dependencies.
 
 ```bash
-git clone https://github.com/Khushx11/MNIST.git
-cd MNIST
+git clone https://github.com/Khushx11/mnist-classification-and-clustering.git
+cd mnist-classification-and-clustering
 python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
