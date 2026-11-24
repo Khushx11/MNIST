@@ -1,0 +1,21 @@
+name: Source and notebook validation
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Validate Python source syntax
+        run: python -m compileall -q src scripts
+      - name: Validate notebook JSON
+        run: python -m json.tool notebooks/analysis.ipynb > /dev/null
