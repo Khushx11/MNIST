@@ -6,6 +6,22 @@ A reproducible machine-learning case study spanning classification, exploratory 
 
 This project began as individual coursework in **Machine Learning Algorithms at Adelaide University (2026)**. This public repository contains a cleaned source-code and notebook version, separate from the private submission archive.
 
+
+## Reliability evaluation
+
+```mermaid
+flowchart LR
+    A["Official training partition"]
+    B["Fit and calibrate"]
+    C["Select abstention threshold"]
+    D["Test clean and degraded digits"]
+    A --> B --> C --> D
+```
+
+![Held-out digit classification accuracy](docs/readme-benchmark.svg)
+
+Official test partition for digits 1 and 7, with 2,163 images.
+
 ## My contribution
 
 The original classification and clustering study was my individual Adelaide University coursework. The repository includes the analysis notebook, comparison of classification and clustering methods, and a later reliability extension evaluating calibration, abstention and corruptions on the official held-out MNIST split.
