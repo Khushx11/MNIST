@@ -1,5 +1,7 @@
 # Reliable Handwriting Classification: MNIST 1 vs 7
 
+Portfolio by [Khush Bhavin Maru](https://github.com/Khushx11) · Adelaide University MAAIM.
+
 A reproducible machine-learning case study spanning classification, exploratory clustering, calibration, selective prediction, and robustness to distribution shifts. The reliability experiment expands the original coursework with a fully separate train/validation/test protocol.
 
 This project began as individual coursework in **Machine Learning Algorithms at Adelaide University (2026)**. This public repository contains a cleaned source-code and notebook version, separate from the private submission archive.
