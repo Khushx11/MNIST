@@ -7,20 +7,11 @@ A reproducible machine-learning case study spanning classification, exploratory 
 This project began as individual coursework in **Machine Learning Algorithms at Adelaide University (2026)**. This public repository contains a cleaned source-code and notebook version, separate from the private submission archive.
 
 
-## Reliability evaluation
+## One corruption, two effects
 
-```mermaid
-flowchart LR
-    A["Official training partition"]
-    B["Fit and calibrate"]
-    C["Select abstention threshold"]
-    D["Test clean and degraded digits"]
-    A --> B --> C --> D
-```
+![Clean versus central-occlusion error and expected calibration error on held-out digits 1 and 7](docs/readme-benchmark.svg)
 
-![Held-out digit classification accuracy](docs/readme-benchmark.svg)
-
-Official test partition for digits 1 and 7, with 2,163 images.
+On 2,163 held-out images, central occlusion increased both classification error and the expected calibration error. Each panel has its own labelled scale so that accuracy loss and confidence reliability remain distinct.
 
 ## My contribution
 

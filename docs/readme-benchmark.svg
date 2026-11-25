@@ -1,9 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title detail" width="720" height="165" viewBox="0 0 720 165">
-<title id="title">Held-out digit classification accuracy</title>
-<desc id="detail">Clean 99.26%; Central occlusion 96.9%. Scale begins at zero.</desc>
-<rect width="720" height="165" rx="12" fill="#eef4f8"/>
-<g font-family="system-ui, sans-serif" fill="#172c42"><text x="24" y="31" font-size="19" font-weight="700">Held-out digit classification accuracy</text>
-<text x="24" y="69" font-size="14">Clean</text><rect x="209" y="54" width="394" height="20" rx="4" fill="#d5e2eb"/><rect x="209" y="54" width="391.08" height="20" rx="4" fill="#146c79"/><text x="619" y="69" font-size="14">99.26%</text>
-<text x="24" y="108" font-size="14">Central occlusion</text><rect x="209" y="93" width="394" height="20" rx="4" fill="#d5e2eb"/><rect x="209" y="93" width="381.79" height="20" rx="4" fill="#2f5687"/><text x="619" y="108" font-size="14">96.9%</text>
-<text x="209" y="150" font-size="12">0</text><text x="602" y="150" text-anchor="end" font-size="12">100%</text></g>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="265" viewBox="0 0 680 265" role="img" aria-labelledby="title desc">
+<title id="title">Central occlusion effects on MNIST digits 1 and 7</title><desc id="desc">Clean classification error 0.74% and central occlusion error 3.10%, calculated as 100% minus accuracy. Expected calibration error rises from 0.0055 to 0.0702.</desc>
+<rect width="680" height="265" rx="14" fill="#f8fafc"/>
+<g font-family="system-ui,sans-serif" fill="#182c40" font-size="14">
+<text x="25" y="32" font-weight="700" font-size="22">Central occlusion changes accuracy and calibration</text>
+<text x="25" y="55" fill="#42566c">Official held-out MNIST test · digits 1 and 7 · 2,163 images</text>
+<text x="48" y="88" font-weight="700">Classification error</text><path d="M76 104V204H312" fill="none" stroke="#c5d2de"/><text x="68" y="109" text-anchor="end">4%</text><text x="68" y="208" text-anchor="end">0</text><path d="M126 185.5L248 126.5" stroke="#75509a" stroke-width="3"/><circle cx="126" cy="185.5" r="5" fill="#75509a"/><circle cx="248" cy="126.5" r="5" fill="#75509a"/><text x="126" y="174.5" text-anchor="middle">0.74%</text><text x="257" y="130.5">3.10%</text><text x="126" y="231" text-anchor="middle">Clean</text><text x="248" y="231" text-anchor="middle">Occluded</text>
+<text x="374" y="88" font-weight="700">Expected calibration error</text><path d="M402 104V204H638" fill="none" stroke="#c5d2de"/><text x="394" y="109" text-anchor="end">0.08</text><text x="394" y="208" text-anchor="end">0</text><path d="M452 197.125L574 116.25" stroke="#75509a" stroke-width="3"/><circle cx="452" cy="197.125" r="5" fill="#75509a"/><circle cx="574" cy="116.25" r="5" fill="#75509a"/><text x="452" y="186.125" text-anchor="middle">0.0055</text><text x="583" y="120.25">0.0702</text><text x="452" y="231" text-anchor="middle">Clean</text><text x="574" y="231" text-anchor="middle">Occluded</text>
+</g></svg>
