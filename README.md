@@ -4,6 +4,10 @@ A reproducible machine-learning case study spanning classification, exploratory 
 
 This project began as individual coursework in **Machine Learning Algorithms at Adelaide University (2026)**. This public repository contains a cleaned source-code and notebook version, separate from the private submission archive.
 
+## My contribution
+
+The original classification and clustering study was my individual Adelaide University coursework. The repository includes the analysis notebook, comparison of classification and clustering methods, and a later reliability extension evaluating calibration, abstention and corruptions on the official held-out MNIST split.
+
 ## Advanced reliability extension
 
 The original 100-example coursework study remains available in the notebook. A **separate, larger reliability experiment** now trains on digits 1 and 7 from the official 60,000-example MNIST training partition, selects confidence thresholds at five validation-only risk targets (0%, 0.1%, 0.5%, 1% and 5%), and evaluates unchanged weights and thresholds on the held-out official test partition.
